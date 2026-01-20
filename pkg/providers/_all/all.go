@@ -46,6 +46,7 @@ import (
 	_ "github.com/StackExchange/dnscontrol/v4/providers/namecheap"
 	_ "github.com/StackExchange/dnscontrol/v4/providers/namedotcom"
 	_ "github.com/StackExchange/dnscontrol/v4/providers/netcup"
+	_ "github.com/StackExchange/dnscontrol/v4/providers/netbird"
 	_ "github.com/StackExchange/dnscontrol/v4/providers/netlify"
 	_ "github.com/StackExchange/dnscontrol/v4/providers/ns1"
 	_ "github.com/StackExchange/dnscontrol/v4/providers/opensrs"
