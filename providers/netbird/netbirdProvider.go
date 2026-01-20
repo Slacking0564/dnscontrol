@@ -146,7 +146,11 @@ func (c *netbirdProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 		case diff2.CHANGE:
 			oldRec := inst.Old[0]
 			newRec := inst.New[0]
-			recordID := oldRec.Original.(*DNSRecord).ID
+			origRecord, ok := oldRec.Original.(*DNSRecord)
+			if !ok {
+				return nil, 0, fmt.Errorf("original record is not a *DNSRecord")
+			}
+			recordID := origRecord.ID
 			req := toRecordRequest(newRec)
 			zoneID := zone.ID
 			corrections = append(corrections, &models.Correction{
@@ -159,7 +163,11 @@ func (c *netbirdProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 
 		case diff2.DELETE:
 			oldRec := inst.Old[0]
-			recordID := oldRec.Original.(*DNSRecord).ID
+			origRecord, ok := oldRec.Original.(*DNSRecord)
+			if !ok {
+				return nil, 0, fmt.Errorf("original record is not a *DNSRecord")
+			}
+			recordID := origRecord.ID
 			zoneID := zone.ID
 			corrections = append(corrections, &models.Correction{
 				Msg: inst.MsgsJoined,
@@ -208,7 +216,7 @@ func (c *netbirdProvider) EnsureZoneExists(domain string, metadata map[string]st
 		Domain:             domain,
 		Enabled:            true,
 		EnableSearchDomain: false,
-		DistributionGroups: []string{}, // Empty by default, can be configured via metadata
+		DistributionGroups: []string{}, // Empty by default
 	}
 
 	_, err = c.createZone(req)
